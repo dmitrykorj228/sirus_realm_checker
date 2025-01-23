@@ -45,4 +45,3 @@ while True:
         sleep(sleep_time)
     except:
         pass
-
