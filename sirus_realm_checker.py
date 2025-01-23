@@ -10,7 +10,7 @@ CHAT_ID = "-1002289513470"
 
 
 def get_realm_data() -> bool:
-    driver = uc.Chrome(headless=False, use_subprocess=True)
+    driver = uc.Chrome(headless=False, use_subprocess=True, driver_executable_path="/usr/bin/chromedriver")
     driver.get('https://sirus.su/api/statistic/tooltip.json')
     response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
     driver.close()
@@ -36,7 +36,7 @@ while True:
     realm_data = get_realm_data()['realms'][1]
     server_name = realm_data['name']
     is_online = realm_data['isOnline']
-    if not is_online:
+    if is_online:
         tg_message = f"{server_name}is offline!"
         tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
         requests.get(tg_send_message_url)
