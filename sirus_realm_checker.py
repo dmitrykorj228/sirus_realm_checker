@@ -31,17 +31,14 @@ def wait_for_server_up():
 
 
 while True:
-    try:
-        status = None
-        sleep_time = 30
-        realm_data = get_realm_data()['realms'][1]
-        server_name = realm_data['name']
-        is_online = realm_data['isOnline']
-        if not is_online:
-            tg_message = f"{server_name}is offline!"
-            tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
-            requests.get(tg_send_message_url)
-            wait_for_server_up()
-        sleep(sleep_time)
-    except:
-        pass
+    status = None
+    sleep_time = 30
+    realm_data = get_realm_data()['realms'][1]
+    server_name = realm_data['name']
+    is_online = realm_data['isOnline']
+    if not is_online:
+        tg_message = f"{server_name}is offline!"
+        tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
+        requests.get(tg_send_message_url)
+        wait_for_server_up()
+    sleep(sleep_time)
