@@ -35,7 +35,7 @@ def wait_for_server_up():
 
 while True:
     status = None
-    sleep_time = 30
+    sleep_time = 35
     realm_data = get_realm_data()['realms'][1]
     server_name = realm_data['name']
     is_online = realm_data['isOnline']
