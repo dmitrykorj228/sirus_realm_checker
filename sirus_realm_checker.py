@@ -18,30 +18,31 @@ def get_realm_data() -> bool:
 
 
 def wait_for_server_up():
-    try:
-        while True:
-            response = get_realm_data()
-            is_online = response['isOnline']
-            if not is_online:
-                tg_message = f"{server_name}is up now!"
-                tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
-                requests.get(tg_send_message_url)
-                break
-            sleep(10)
-    except:
-        pass
+    while True:
+        response = get_realm_data()
+        is_online = response['isOnline']
+        if not is_online:
+            tg_message = f"{server_name}is up now!"
+            tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
+            requests.get(tg_send_message_url)
+            break
+        sleep(10)
     return True
 
 
 while True:
-    status = None
-    sleep_time = 35
-    realm_data = get_realm_data()['realms'][1]
-    server_name = realm_data['name']
-    is_online = realm_data['isOnline']
-    if is_online:
-        tg_message = f"{server_name}is offline!"
-        tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
-        requests.get(tg_send_message_url)
-        wait_for_server_up()
-    sleep(sleep_time)
+    try:
+        status = None
+        sleep_time = 35
+        realm_data = get_realm_data()['realms'][1]
+        server_name = realm_data['name']
+        is_online = realm_data['isOnline']
+        if not is_online:
+            tg_message = f"{server_name}is offline!"
+            tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
+            requests.get(tg_send_message_url)
+            wait_for_server_up()
+        sleep(sleep_time)
+    except:
+        pass
+
