@@ -18,15 +18,18 @@ def get_realm_data() -> bool:
 
 
 def wait_for_server_up():
-    while True:
-        response = get_realm_data()
-        is_online = response['isOnline']
-        if is_online:
-            tg_message = f"{server_name}is up now!"
-            tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
-            requests.get(tg_send_message_url)
-            break
-        sleep(10)
+    try:
+        while True:
+            response = get_realm_data()
+            is_online = response['isOnline']
+            if not is_online:
+                tg_message = f"{server_name}is up now!"
+                tg_send_message_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={tg_message}"
+                requests.get(tg_send_message_url)
+                break
+            sleep(10)
+    except:
+        pass
     return True
 
 
