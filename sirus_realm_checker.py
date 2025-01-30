@@ -1,6 +1,8 @@
 from time import sleep
 import json
 import logging
+import shutil
+import tempfile
 import requests
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
@@ -22,6 +24,10 @@ def get_realm_data():
         is_online = response['realms'][1]['isOnline']
     except KeyError:
         is_online = False
+    finally:
+        temp_folder = tempfile.gettempdir()
+        logger.info(f"Cleaning temp directory: {temp_folder}") 
+        # shutil.rmtree(temp_folder)
     return {'isOnline': is_online, 'name': realm_name}
 
 
