@@ -5,6 +5,7 @@ import tempfile
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 
@@ -17,7 +18,9 @@ logger = logging.getLogger(__name__)
 
 
 def get_realm_data():
-    driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
+    options = Options()
+    options.headless = False
+    driver = webdriver.Firefox(options=options, service=FirefoxService(GeckoDriverManager().install(), service_args='--headless'))
     driver.get('https://sirus.su/api/statistic/tooltip.json')
     response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
     driver.close()
