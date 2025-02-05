@@ -16,10 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_realm_data():
-    service = Service(executable_path='/usr/bin/geckodriver')
-    options = Options()
-    options.add_argument("--headless")
-    driver = webdriver.Firefox(service=service, options=options)
+    driver = webdriver.Firefox(executable_path='/usr/bin/geckodriver')
     driver.get('https://sirus.su/api/statistic/tooltip.json')
     response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
     driver.close()
