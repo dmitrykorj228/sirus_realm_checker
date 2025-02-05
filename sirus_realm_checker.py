@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_realm_data():
-    service = Service(executable_path='/usr/bin/geckodriver')
-    driver = webdriver.Firefox(service=service)
+    from undetected_geckodriver import Firefox
+    driver = Firefox()
     driver.get('https://sirus.su/api/statistic/tooltip.json')
     response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
     driver.close()
