@@ -1,11 +1,11 @@
 from time import sleep
 import json
 import logging
-import shutil
 import tempfile
 import requests
-import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
+from selenium import webdriver
+from webdrivermanager import GeckoDriverManager
 
 TOKEN = "7711822294:AAEN6ywEkaJSV-w2BHB5z8O9dS1sc4AsdX4"
 CHAT_ID = "-1002289513470"
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_realm_data():
-    driver = uc.Chrome(headless=False, use_subprocess=True, driver_executable_path="/usr/bin/chromedriver")
+    driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
     driver.get('https://sirus.su/api/statistic/tooltip.json')
     response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
     driver.close()
