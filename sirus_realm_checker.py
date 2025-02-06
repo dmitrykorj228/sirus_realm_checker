@@ -16,8 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 def get_realm_data():
+    options = Options()
+    options.set_preference("devtools.jsonview.enabled", False)
     service = Service(executable_path='/usr/bin/geckodriver')
-    driver = webdriver.Firefox(service=service)
+    driver = webdriver.Firefox(service=service, options=options)
     driver.get('https://sirus.su/api/statistic/tooltip.json')
     response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
     driver.close()
@@ -28,7 +30,7 @@ def get_realm_data():
         is_online = False
     finally:
         temp_folder = tempfile.gettempdir()
-        logger.info(f"Cleaning temp directory: {temp_folder}") 
+        logger.info(f"Cleaning temp directory: {temp_folder}")
         # shutil.rmtree(temp_folder)
     return {'isOnline': is_online, 'name': realm_name}
 
