@@ -4,8 +4,10 @@ import logging
 
 import psutil
 import requests
-import undetected_chromedriver as uc
+from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 
 TOKEN = "7711822294:AAEN6ywEkaJSV-w2BHB5z8O9dS1sc4AsdX4"
 CHAT_ID = "-1002289513470"
@@ -17,7 +19,10 @@ logger = logging.getLogger(__name__)
 def get_realm_data():
     realm_name = "Soulseeker x1 - 3.3.5a+"
     kill_old_browser()
-    driver = uc.Chrome(headless=False, use_subprocess=True)
+    options = Options()
+    options.set_preference("devtools.jsonview.enabled", False)
+    service = Service(executable_path='/usr/bin/geckodriver')
+    driver = webdriver.Firefox(service=service, options=options)
     try:
         driver.get('https://sirus.su/api/statistic/tooltip.jsonz')
         response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
