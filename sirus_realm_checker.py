@@ -24,7 +24,7 @@ def get_realm_data():
     service = Service(executable_path='/usr/bin/geckodriver')
     driver = webdriver.Firefox(service=service, options=options)
     try:
-        driver.get('https://sirus.su/api/statistic/tooltip.jsonz')
+        driver.get('https://sirus.su/api/statistic/tooltip.json')
         response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
         is_online = response['realms'][1]['isOnline']
     except Exception as e:
