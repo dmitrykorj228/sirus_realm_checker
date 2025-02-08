@@ -52,7 +52,7 @@ def wait_for_server_up():
 
 def kill_old_browser():
     for process in psutil.process_iter():
-        if 'firefox' in str(process.name):
+        if 'firefox' or 'geckodriver' in str(process.name):
             process.kill()
             logger.info("Killed old browser")
 
