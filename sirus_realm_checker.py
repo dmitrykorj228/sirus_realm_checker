@@ -28,19 +28,25 @@ def get_realm_data():
         driver.get('https://sirus.su/api/statistic/tooltip.json')
         response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
         is_online = response['realms'][1]['isOnline']
-        logger.info(f"Success")
+        logger.info(response)
     except Exception as e:
         logger.info(f"Error: {type(e).__name__}")
         is_online = False
     finally:
         if driver:
-            driver.close()
+            try:
+                driver.close()
+            except Exception as e:
+                logger.info(f"Error: {type(e).__name__}")
     return {'isOnline': is_online, 'name': realm_name}
 
 
 def send_tg_message(msg: str):
     full_tg_message = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={msg}"
-    requests.get(full_tg_message)
+    try:
+        requests.get(full_tg_message)
+    except Exception as e:
+        logger.info(f"Error: {type(e).__name__}")
 
 
 def wait_for_server_up():
@@ -50,7 +56,7 @@ def wait_for_server_up():
         if is_online:
             send_tg_message(f"{server_name}is up now!")
             break
-        sleep(10)
+        sleep(30)
 
 
 def kill_old_browser():
@@ -63,7 +69,7 @@ def kill_old_browser():
 while True:
     try:
         status = None
-        sleep_time = 25
+        sleep_time = 50
         realm_data = get_realm_data()
         server_name = realm_data['name']
         is_online = realm_data['isOnline']
