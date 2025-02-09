@@ -22,14 +22,14 @@ def get_realm_data():
     options = Options()
     options.set_preference("devtools.jsonview.enabled", False)
     service = Service(executable_path='/usr/bin/geckodriver')
-    driver = webdriver.Firefox(service=service, options=options)
-    driver.set_page_load_timeout(360)
     try:
+        driver = webdriver.Firefox(service=service, options=options)
         driver.get('https://sirus.su/api/statistic/tooltip.json')
         response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
         is_online = response['realms'][1]['isOnline']
+        logger.info(f"Success")
     except Exception as e:
-        print(type(e).__name__)
+        logger.info(f"Error: {type(e).__name__}")
         is_online = False
     finally:
         driver.close()
