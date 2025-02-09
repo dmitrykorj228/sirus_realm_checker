@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_realm_data():
+    driver = None
     realm_name = "Soulseeker x1 - 3.3.5a+"
     kill_old_browser()
     options = Options()
@@ -32,7 +33,8 @@ def get_realm_data():
         logger.info(f"Error: {type(e).__name__}")
         is_online = False
     finally:
-        driver.close()
+        if driver:
+            driver.close()
     return {'isOnline': is_online, 'name': realm_name}
 
 
