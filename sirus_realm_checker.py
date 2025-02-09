@@ -23,6 +23,7 @@ def get_realm_data():
     options.set_preference("devtools.jsonview.enabled", False)
     service = Service(executable_path='/usr/bin/geckodriver')
     driver = webdriver.Firefox(service=service, options=options)
+    driver.set_page_load_timeout(360)
     try:
         driver.get('https://sirus.su/api/statistic/tooltip.json')
         response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
