@@ -1,15 +1,9 @@
+import json
 from json import JSONDecodeError
 from time import sleep
-import json
 import logging
 
-import psutil
 import requests
-import undetected_chromedriver
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
 
 TOKEN = "7711822294:AAEN6ywEkaJSV-w2BHB5z8O9dS1sc4AsdX4"
 CHAT_ID = "-1002289513470"
@@ -19,26 +13,23 @@ logger = logging.getLogger(__name__)
 
 
 def get_realm_data():
-    driver = None
     realm_name = "Soulseeker x1 - 3.3.5a+"
-    kill_old_browser()
-    options = Options()
-    options.set_preference("devtools.jsonview.enabled", False)
-    service = Service(executable_path='/usr/bin/geckodriver')
     try:
-        driver = webdriver.Firefox(service=service, options=options)
-        driver.get('https://sirus.su/api/statistic/tooltip.json')
-        response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
+        import cloudscraper
+        scraper = cloudscraper.create_scraper(
+            browser={
+                'browser': 'firefox',
+                'platform': 'windows',
+                'mobile': False
+            }
+        )
+        response = json.loads(scraper.get("https://sirus.su/api/statistic/tooltip.json").text)
         is_online = response['realms'][1]['isOnline']
+        if response['realms'][1]['online'] < 10:
+            is_online = False
         logger.info(response)
-    except JSONDecodeError:
+    except (JSONDecodeError, KeyError):
         is_online = False
-    finally:
-        if driver:
-            try:
-                driver.close()
-            except Exception as e:
-                logger.info(f"Error: {type(e).__name__}")
     return {'isOnline': is_online, 'name': realm_name}
 
 
@@ -63,16 +54,8 @@ def wait_for_server_up():
         sleep(30)
 
 
-def kill_old_browser():
-    for process in psutil.process_iter():
-        if ('firefox' or 'geckodriver') in str(process.name):
-            process.kill()
-            logger.info("Killed old browser")
-
-
 while True:
     try:
-        status = None
         sleep_time = 50
         realm_data = get_realm_data()
         server_name = realm_data['name']
