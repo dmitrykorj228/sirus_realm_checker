@@ -30,6 +30,8 @@ def get_realm_data():
         logger.info(response)
     except (JSONDecodeError, KeyError):
         is_online = False
+    except ConnectionError:
+        pass
     return {'isOnline': is_online, 'name': realm_name}
 
 
