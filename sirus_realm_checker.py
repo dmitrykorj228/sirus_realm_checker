@@ -1,9 +1,11 @@
+from json import JSONDecodeError
 from time import sleep
 import json
 import logging
 
 import psutil
 import requests
+import undetected_chromedriver
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
@@ -29,8 +31,7 @@ def get_realm_data():
         response = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
         is_online = response['realms'][1]['isOnline']
         logger.info(response)
-    except Exception as e:
-        logger.info(f"Error: {type(e).__name__}")
+    except JSONDecodeError:
         is_online = False
     finally:
         if driver:
@@ -43,10 +44,13 @@ def get_realm_data():
 
 def send_tg_message(msg: str):
     full_tg_message = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={msg}"
-    try:
-        requests.get(full_tg_message)
-    except Exception as e:
-        logger.info(f"Error: {type(e).__name__}")
+    is_message_sent = False
+    while not is_message_sent:
+        try:
+            requests.get(full_tg_message)
+            is_message_sent = True
+        except Exception:
+            pass
 
 
 def wait_for_server_up():
