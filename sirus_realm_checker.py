@@ -4,7 +4,6 @@ from time import sleep
 import logging
 
 import requests
-from urllib3.exceptions import NameResolutionError, MaxRetryError
 
 TOKEN = "7711822294:AAEN6ywEkaJSV-w2BHB5z8O9dS1sc4AsdX4"
 CHAT_ID = "-1002289513470"
@@ -31,7 +30,7 @@ def get_realm_data():
         logger.info(response)
     except (JSONDecodeError, KeyError):
         is_online = False
-    except (ConnectionError, NameResolutionError, MaxRetryError):
+    except Exception:
         pass
     return {'isOnline': is_online, 'name': realm_name}
 
