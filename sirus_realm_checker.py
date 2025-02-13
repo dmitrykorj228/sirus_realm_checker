@@ -27,7 +27,6 @@ def get_realm_data():
         is_online = response['realms'][1]['isOnline']
         if response['realms'][1]['online'] < 10:
             is_online = False
-        logger.info(response)
     except (JSONDecodeError, KeyError):
         is_online = False
     except Exception:
