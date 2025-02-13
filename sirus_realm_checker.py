@@ -27,8 +27,11 @@ def get_realm_data():
         is_online = response['realms'][1]['isOnline']
         if response['realms'][1]['online'] < 10:
             is_online = False
-    except Exception:
+        logger.info(response)
+    except (JSONDecodeError, KeyError):
         is_online = False
+    except Exception:
+        pass
     return {'isOnline': is_online, 'name': realm_name}
 
 
@@ -50,7 +53,7 @@ def wait_for_server_up():
         if is_online:
             send_tg_message(f"{server_name}is up now!")
             break
-        sleep(30)
+        sleep(15)
 
 
 while True:
