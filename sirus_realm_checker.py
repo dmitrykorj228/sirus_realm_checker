@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_realm_data():
+    is_online = None
     realm_name = "Soulseeker x1 - 3.3.5a+"
     try:
         import cloudscraper
@@ -61,7 +62,7 @@ while True:
         realm_data = get_realm_data()
         server_name = realm_data['name']
         is_online = realm_data['isOnline']
-        if not is_online:
+        if is_online is False:
             send_tg_message(f"{server_name}is offline!")
             wait_for_server_up()
         sleep(sleep_time)
