@@ -32,6 +32,7 @@ def get_realm_data():
         is_online = False
     except Exception:
         pass
+    print(is_online)
     return {'isOnline': is_online, 'name': realm_name}
 
 
